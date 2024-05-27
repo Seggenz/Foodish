@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name ="food_options_array">
+        <item>biryani</item>
+        <item>burger</item>
+        <item>butter-chicken</item>
+        <item>dessert</item>
+        <item>dosa</item>
+        <item>idly</item>
+        <item>pasta</item>
+        <item>pizza</item>
+        <item>rice</item>
+        <item>samosa</item>
+    </string-array>
+</resources>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation_graph"
+    app:startDestination="@id/foodCategoryFragment">
+
+    <fragment
+        android:id="@+id/foodCategoryFragment"
+        android:name="com.example.foodish.FoodCategoryFragment"
+        android:label="Food Category"
+        tools:layout="@layout/fragment_category_choose" >
+        <action
+            android:id="@+id/action_foodCategoryFragment_to_foodListFragment"
+            app:destination="@id/foodListFragment">
+            <argument
+                android:name="selectedCategory"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/foodListFragment"
+        android:name="com.example.foodish.FoodListFragment"
+        android:label="Food List"
+        tools:layout="@layout/fragment_food_list" >
+        <action
+            android:id="@+id/action_foodListFragment_to_foodCategoryFragment"
+            app:destination="@id/foodCategoryFragment" />
+    </fragment>
+</navigation>
