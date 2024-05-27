@@ -11,10 +11,6 @@ import android.widget.Spinner
 import androidx.navigation.fragment.findNavController
 import com.example.foodish.databinding.ActivityMainBinding
 
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-
 class FoodCategoryFragment: Fragment() {
     private var _binding: FragmentCategoryChooseBinding? = null
     private val binding get() = _binding!!

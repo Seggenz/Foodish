@@ -4,17 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.navArgs
 import com.example.foodish.databinding.FragmentFoodListBinding
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class FoodListFragment : Fragment() {
     private var _binding: FragmentFoodListBinding? = null
     private val binding get() = _binding!!
 
-//    private val args: FoodListFragmentArgs by navArgs() // Upewnij się, że ten wiersz jest poprawnie używany
+//    private val args: FoodListFragmentArgs by navArgs()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -24,26 +29,47 @@ class FoodListFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        fetchFoodImages("burger")
 //        val selectedCategory = args.selectedCategory
 
-        // Use selectedCategory to filter your food list or fetch data accordingly
-        val foodList = listOf(
-            FoodItem("Pizza", R.drawable.pizza),
-            FoodItem("Burger", R.drawable.pizza),
-            FoodItem("Sushi", R.drawable.pizza)
-            // Add more items as needed
-        )
-
-        val adapter = FoodListAdapter(foodList)
-        binding.foodList.layoutManager = LinearLayoutManager(context)
-        binding.foodList.adapter = adapter
 
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_foodListFragment_to_foodCategoryFragment)
         }
+    }
+
+
+    private fun fetchFoodImages(category: String) {
+        RetrofitInstance.api.getImage(category).enqueue(object : Callback<FoodishResponse> {
+            override fun onResponse(call: Call<FoodishResponse>, response: Response<FoodishResponse>) {
+                if (response.isSuccessful && response.body() != null) {
+                    val foodList = listOf(
+                        FoodItem("Burger", response.body()!!.image)
+                    )
+                    setupRecyclerView(foodList)
+                } else {
+                    showError()
+                }
+            }
+
+            override fun onFailure(call: Call<FoodishResponse>, t: Throwable) {
+                showError()
+            }
+        })
+    }
+
+    private fun setupRecyclerView(foodList: List<FoodItem>) {
+        val adapter = FoodListAdapter(foodList)
+        binding.foodList.layoutManager = LinearLayoutManager(context)
+        binding.foodList.adapter = adapter
+    }
+
+    private fun showError() {
+        Toast.makeText(context, "Failed to load images", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroyView() {
