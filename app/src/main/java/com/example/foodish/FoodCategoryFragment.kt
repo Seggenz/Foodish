@@ -40,8 +40,8 @@ class FoodCategoryFragment: Fragment() {
 
         binding.getFoodButton.setOnClickListener {
             val selectedOption = spinner.selectedItem.toString()
-            val action = FoodCategoryFragmentDirections.actionFoodCategoryFragmentToFoodListFragment(selectedOption)
-            findNavController().navigate(action)
+//            val action = FoodCategoryFragment.actionFoodCategoryFragmentToFoodListFragment(selectedOption)
+            findNavController().navigate(R.id.action_foodCategoryFragment_to_foodListFragment)
         }
     }
     override fun onDestroyView() {

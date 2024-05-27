@@ -15,7 +15,8 @@
             app:destination="@id/foodListFragment">
             <argument
                 android:name="selectedCategory"
-                app:argType="string" />
+                app:argType="string"
+                app:nullable="false"/>
         </action>
     </fragment>
 

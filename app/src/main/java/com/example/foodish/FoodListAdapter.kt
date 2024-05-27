@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodish.databinding.FragmentFoodItemBinding
 
-
+//data class FoodItem(val name: String, val imageUrl: String)
 class FoodListAdapter(private val foodList: List<FoodItem>) : RecyclerView.Adapter<FoodListAdapter.FoodViewHolder>() {
 
     class FoodViewHolder(val binding: FragmentFoodItemBinding) : RecyclerView.ViewHolder(binding.root)

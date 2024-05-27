@@ -33,7 +33,7 @@ class FoodListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchFoodImages("burger")
+        fetchFoodImages("burger",5)
 //        val selectedCategory = args.selectedCategory
 
 
@@ -43,23 +43,27 @@ class FoodListFragment : Fragment() {
     }
 
 
-    private fun fetchFoodImages(category: String) {
-        RetrofitInstance.api.getImage(category).enqueue(object : Callback<FoodishResponse> {
-            override fun onResponse(call: Call<FoodishResponse>, response: Response<FoodishResponse>) {
-                if (response.isSuccessful && response.body() != null) {
-                    val foodList = listOf(
-                        FoodItem("Burger", response.body()!!.image)
-                    )
-                    setupRecyclerView(foodList)
-                } else {
+    private fun fetchFoodImages(category: String, count: Int) {
+        val foodList = mutableListOf<FoodItem>()
+
+        for (i in 1..count) {
+            RetrofitInstance.api.getImage(category).enqueue(object : Callback<FoodishResponse> {
+                override fun onResponse(call: Call<FoodishResponse>, response: Response<FoodishResponse>) {
+                    if (response.isSuccessful && response.body() != null) {
+                        foodList.add(FoodItem(category.capitalize(), response.body()!!.image))
+                        if (foodList.size == count) {
+                            setupRecyclerView(foodList)
+                        }
+                    } else {
+                        showError()
+                    }
+                }
+
+                override fun onFailure(call: Call<FoodishResponse>, t: Throwable) {
                     showError()
                 }
-            }
-
-            override fun onFailure(call: Call<FoodishResponse>, t: Throwable) {
-                showError()
-            }
-        })
+            })
+        }
     }
 
     private fun setupRecyclerView(foodList: List<FoodItem>) {
