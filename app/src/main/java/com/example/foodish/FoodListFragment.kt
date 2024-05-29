@@ -18,7 +18,7 @@ class FoodListFragment : Fragment() {
     private var _binding: FragmentFoodListBinding? = null
     private val binding get() = _binding!!
 
-//    private val args: FoodListFragmentArgs by navArgs()
+    private val args: FoodListFragmentArgs by navArgs()
 
 
     override fun onCreateView(
@@ -33,9 +33,9 @@ class FoodListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fetchFoodImages("burger",5)
-//        val selectedCategory = args.selectedCategory
-
+        val selectedCategory = args.selectedCategory
+        val selectedAmount = args.selectedAmount
+        fetchFoodImages(selectedCategory,selectedAmount)
 
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_foodListFragment_to_foodCategoryFragment)

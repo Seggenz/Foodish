@@ -2,6 +2,7 @@ package com.example.foodish
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -24,6 +25,22 @@ class FoodListAdapter(private val foodList: List<FoodItem>) : RecyclerView.Adapt
         Glide.with(holder.binding.foodImage.context)
             .load(foodItem.imageUrl)
             .into(holder.binding.foodImage)
+
+        updateFavoriteIcon(holder.binding.favouriteButton, foodItem.isFavorite)
+
+        holder.binding.favouriteButton.setOnClickListener {
+            foodItem.isFavorite = !foodItem.isFavorite
+            updateFavoriteIcon(holder.binding.favouriteButton, foodItem.isFavorite)
+        }
+    }
+
+    private fun updateFavoriteIcon(button: ImageButton, isFavorite: Boolean) {
+        if(isFavorite) {
+            button.setImageResource(R.drawable.star_filled)
+        }
+        else {
+            button.setImageResource(R.drawable.star_outline)
+        }
     }
 
     override fun getItemCount() = foodList.size

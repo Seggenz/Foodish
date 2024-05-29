@@ -13,10 +13,7 @@
         <action
             android:id="@+id/action_foodCategoryFragment_to_foodListFragment"
             app:destination="@id/foodListFragment">
-            <argument
-                android:name="selectedCategory"
-                app:argType="string"
-                app:nullable="false"/>
+
         </action>
     </fragment>
 
@@ -28,5 +25,12 @@
         <action
             android:id="@+id/action_foodListFragment_to_foodCategoryFragment"
             app:destination="@id/foodCategoryFragment" />
+        <argument
+            android:name="selectedCategory"
+            app:argType="string"/>
+<!--            app:nullable="false"/>-->
+        <argument
+            android:name="selectedAmount"
+            app:argType="integer" />
     </fragment>
 </navigation>
