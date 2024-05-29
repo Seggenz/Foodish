@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FoodListFragment">
+    tools:context=".ui.list.FoodListFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/food_list"
@@ -29,6 +29,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.976"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck"
+        android:focusable="true"
+        android:contentDescription="@string/back" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

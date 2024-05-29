@@ -1,4 +1,4 @@
-package com.example.foodish
+package com.example.foodish.data.api
 
 import retrofit2.Call
 import retrofit2.http.GET

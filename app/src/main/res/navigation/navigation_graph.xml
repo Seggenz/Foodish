@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/foodCategoryFragment"
-        android:name="com.example.foodish.FoodCategoryFragment"
+        android:name="com.example.foodish.ui.category.FoodCategoryFragment"
         android:label="Food Category"
         tools:layout="@layout/fragment_category_choose" >
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/foodListFragment"
-        android:name="com.example.foodish.FoodListFragment"
+        android:name="com.example.foodish.ui.list.FoodListFragment"
         android:label="Food List"
         tools:layout="@layout/fragment_food_list" >
         <action
@@ -37,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/favoriteFoodFragment"
-        android:name="com.example.foodish.FavoriteFoodFragment"
+        android:name="com.example.foodish.ui.favorite.FavoriteFoodFragment"
         android:label="FavoriteFoodFragment" >
         <action
             android:id="@+id/action_favoriteFoodFragment_to_foodCategoryFragment"

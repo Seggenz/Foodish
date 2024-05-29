@@ -1,16 +1,19 @@
-package com.example.foodish
+package com.example.foodish.ui.list
 
+import android.app.AlertDialog
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.foodish.R
+import com.example.foodish.data.model.FoodItem
 import com.example.foodish.databinding.FragmentFoodItemBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class FoodListAdapter(
+    private val context: Context,
     private val foodList: List<FoodItem>,
     private val onFavoriteClick: (FoodItem, Boolean) -> Unit
 ) : RecyclerView.Adapter<FoodListAdapter.FoodViewHolder>() {
@@ -32,10 +35,14 @@ class FoodListAdapter(
         updateFavoriteIcon(holder.binding.favouriteButton, foodItem.isFavorite)
 
         holder.binding.favouriteButton.setOnClickListener {
-            val newFavoriteStatus = !foodItem.isFavorite
-            foodItem.isFavorite = newFavoriteStatus
-            updateFavoriteIcon(holder.binding.favouriteButton, newFavoriteStatus)
-            onFavoriteClick(foodItem, newFavoriteStatus)
+            foodItem.isFavorite = !foodItem.isFavorite
+            updateFavoriteIcon(holder.binding.favouriteButton, foodItem.isFavorite)
+            onFavoriteClick(foodItem, foodItem.isFavorite)
+        }
+
+        holder.binding.foodImage.setOnLongClickListener {
+            showImageDialog(foodItem.imageUrl)
+            true
         }
     }
 
@@ -45,6 +52,18 @@ class FoodListAdapter(
         } else {
             button.setImageResource(R.drawable.star_outline)
         }
+    }
+
+    private fun showImageDialog(imageUrl: String) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_image, null)
+        val imageView = dialogView.findViewById<ImageView>(R.id.expanded_image)
+        Glide.with(context).load(imageUrl).into(imageView)
+
+        AlertDialog.Builder(context)
+            .setView(dialogView)
+            .setPositiveButton(android.R.string.ok, null)
+            .create()
+            .show()
     }
 
     override fun getItemCount() = foodList.size

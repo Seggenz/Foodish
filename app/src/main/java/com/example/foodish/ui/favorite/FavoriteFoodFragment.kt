@@ -1,4 +1,4 @@
-package com.example.foodish
+package com.example.foodish.ui.favorite
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.foodish.R
+import com.example.foodish.data.database.FavoriteFoodDatabase
+import com.example.foodish.data.model.FoodItem
 import com.example.foodish.databinding.FragmentFavoriteFoodBinding
+import com.example.foodish.ui.list.FoodListAdapter
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +25,7 @@ class FavoriteFoodFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFavoriteFoodBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -49,8 +53,7 @@ class FavoriteFoodFragment : Fragment() {
     }
 
     private fun setupRecyclerView(foodList: List<FoodItem>) {
-        val adapter = FoodListAdapter(foodList) { foodItem, isFavorite ->
-            // Dodaj lub usuń element z bazy danych
+        val adapter = FoodListAdapter(requireContext(),foodList) { foodItem, isFavorite ->
             CoroutineScope(Dispatchers.IO).launch {
                 val database = FavoriteFoodDatabase.getDatabase(requireContext())
                 if (isFavorite) {
@@ -59,13 +62,14 @@ class FavoriteFoodFragment : Fragment() {
                     database.foodDatabaseDao().deleteFood(foodItem)
                 }
                 withContext(Dispatchers.Main) {
-                    fetchFavoriteFoods() // Odśwież listę po zmianie statusu ulubionych
+                    fetchFavoriteFoods()
                 }
             }
         }
         binding.foodList.layoutManager = LinearLayoutManager(context)
         binding.foodList.adapter = adapter
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,4 +1,4 @@
-package com.example.foodish
+package com.example.foodish.ui.category
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,10 +7,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.SeekBar
 import android.widget.Spinner
+import android.widget.TextView
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.foodish.R
+import com.example.foodish.data.database.FavoriteFoodDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class FoodCategoryFragment: Fragment() {
+
+class FoodCategoryFragment : Fragment() {
     private var _binding: FragmentCategoryChooseBinding? = null
     private val binding get() = _binding!!
 
@@ -18,7 +28,7 @@ class FoodCategoryFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCategoryChooseBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -36,20 +46,23 @@ class FoodCategoryFragment: Fragment() {
             categorySpinner.adapter = adapter
         }
 
-        val amountSpinner: Spinner = binding.foodAmountSpinner
-        ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.food_amount_array,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            amountSpinner.adapter = adapter
-        }
+        val amountSeekBar: SeekBar = binding.foodAmountSeekbar
+        val selectedAmountTextView: TextView = binding.selectedAmount
+
+        amountSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                selectedAmountTextView.text = progress.toString()
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
 
 
         binding.getFoodButton.setOnClickListener {
             val selectedOption = categorySpinner.selectedItem.toString()
-            val selectedAmount = amountSpinner.selectedItem.toString().toInt()
+            val selectedAmount = amountSeekBar.progress
             val action =
                 FoodCategoryFragmentDirections.actionFoodCategoryFragmentToFoodListFragment(
                     selectedOption,
@@ -59,9 +72,24 @@ class FoodCategoryFragment: Fragment() {
             findNavController().navigate(action)
         }
         binding.seeDatabaseButton.setOnClickListener {
-            findNavController().navigate(R.id.action_foodCategoryFragment_to_favoriteFoodFragment)
+            checkDatabaseAndNavigate()
         }
     }
+
+    private fun checkDatabaseAndNavigate() {
+        lifecycleScope.launch {
+            val database = FavoriteFoodDatabase.getDatabase(requireContext())
+            val isEmpty = withContext(Dispatchers.IO) {
+                database.foodDatabaseDao().getFavoriteFoodItems().isEmpty()
+            }
+            if (isEmpty) {
+                Toast.makeText(context, "Database is empty", Toast.LENGTH_SHORT).show()
+            } else {
+                findNavController().navigate(R.id.action_foodCategoryFragment_to_favoriteFoodFragment)
+            }
+        }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

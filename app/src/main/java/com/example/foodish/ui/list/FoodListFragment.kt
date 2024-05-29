@@ -1,4 +1,4 @@
-package com.example.foodish
+package com.example.foodish.ui.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,8 +7,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.foodish.R
+import com.example.foodish.data.api.FoodishResponse
+import com.example.foodish.data.api.RetrofitInstance
+import com.example.foodish.data.database.FavoriteFoodDatabase
+import com.example.foodish.data.model.FoodItem
 import com.example.foodish.databinding.FragmentFoodListBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +21,7 @@ import kotlinx.coroutines.launch
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.Locale
 
 class FoodListFragment : Fragment() {
     private var _binding: FragmentFoodListBinding? = null
@@ -26,7 +32,7 @@ class FoodListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentFoodListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -41,9 +47,6 @@ class FoodListFragment : Fragment() {
         binding.floatingActionButton.setOnClickListener {
             findNavController().navigate(R.id.action_foodListFragment_to_foodCategoryFragment)
         }
-
-        // Dodaj listener do przycisku wyświetlania ulubionych
-
     }
 
     private fun fetchFoodImages(category: String, count: Int) {
@@ -53,7 +56,11 @@ class FoodListFragment : Fragment() {
             RetrofitInstance.api.getImage(category).enqueue(object : Callback<FoodishResponse> {
                 override fun onResponse(call: Call<FoodishResponse>, response: Response<FoodishResponse>) {
                     if (response.isSuccessful && response.body() != null) {
-                        foodList.add(FoodItem(name = category.capitalize(), imageUrl = response.body()!!.image))
+                        foodList.add(FoodItem(name = category.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        }, imageUrl = response.body()!!.image))
                         if (foodList.size == count) {
                             setupRecyclerView(foodList)
                         }
@@ -70,20 +77,21 @@ class FoodListFragment : Fragment() {
     }
 
     private fun setupRecyclerView(foodList: List<FoodItem>) {
-        val adapter = FoodListAdapter(foodList) { foodItem, isFavorite ->
-            // Zaktualizuj element w bazie danych po kliknięciu przycisku
+        val adapter = FoodListAdapter(requireContext(), foodList) { foodItem, isFavorite ->
             CoroutineScope(Dispatchers.IO).launch {
                 val database = FavoriteFoodDatabase.getDatabase(requireContext())
                 if (isFavorite) {
                     database.foodDatabaseDao().insertFood(foodItem)
                 } else {
                     database.foodDatabaseDao().deleteFood(foodItem)
+
                 }
             }
         }
         binding.foodList.layoutManager = LinearLayoutManager(context)
         binding.foodList.adapter = adapter
     }
+
 
     private fun showError() {
         Toast.makeText(context, "Failed to load images", Toast.LENGTH_SHORT).show()

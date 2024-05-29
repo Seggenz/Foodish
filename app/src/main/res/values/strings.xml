@@ -1,4 +1,13 @@
 <resources>
     <string name="app_name">Foodish</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="back">Back button</string>
+    <string name="favorite">Add to Favorite</string>
+    <string name="food_image">Food Image</string>
+    <string name="expanded_image">Expanded Image</string>
+    <string name="foodish">Foodish</string>
+    <string name="choose_the_food_category">Choose the food category</string>
+    <string name="choose_the_amount_of_food">Choose the amount of food</string>
+    <string name="get_food">Get food!</string>
+    <string name="see_database">See database!</string>
 </resources>

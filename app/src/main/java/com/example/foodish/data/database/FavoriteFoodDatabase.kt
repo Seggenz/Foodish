@@ -1,4 +1,4 @@
-package com.example.foodish
+package com.example.foodish.data.database
 
 import android.content.Context
 import androidx.room.Dao
@@ -9,6 +9,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.foodish.data.model.FoodItem
 
 
 @Database(entities = [FoodItem::class], version = 1, exportSchema = false)
