@@ -55,7 +55,11 @@ class FoodCategoryFragment: Fragment() {
                     selectedOption,
                     selectedAmount
                 )
+
             findNavController().navigate(action)
+        }
+        binding.seeDatabaseButton.setOnClickListener {
+            findNavController().navigate(R.id.action_foodCategoryFragment_to_favoriteFoodFragment)
         }
     }
     override fun onDestroyView() {

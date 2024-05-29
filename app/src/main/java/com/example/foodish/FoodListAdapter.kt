@@ -3,14 +3,17 @@ package com.example.foodish
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.foodish.databinding.FragmentFoodItemBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-//data class FoodItem(val name: String, val imageUrl: String)
-class FoodListAdapter(private val foodList: List<FoodItem>) : RecyclerView.Adapter<FoodListAdapter.FoodViewHolder>() {
+class FoodListAdapter(
+    private val foodList: List<FoodItem>,
+    private val onFavoriteClick: (FoodItem, Boolean) -> Unit
+) : RecyclerView.Adapter<FoodListAdapter.FoodViewHolder>() {
 
     class FoodViewHolder(val binding: FragmentFoodItemBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -29,16 +32,17 @@ class FoodListAdapter(private val foodList: List<FoodItem>) : RecyclerView.Adapt
         updateFavoriteIcon(holder.binding.favouriteButton, foodItem.isFavorite)
 
         holder.binding.favouriteButton.setOnClickListener {
-            foodItem.isFavorite = !foodItem.isFavorite
-            updateFavoriteIcon(holder.binding.favouriteButton, foodItem.isFavorite)
+            val newFavoriteStatus = !foodItem.isFavorite
+            foodItem.isFavorite = newFavoriteStatus
+            updateFavoriteIcon(holder.binding.favouriteButton, newFavoriteStatus)
+            onFavoriteClick(foodItem, newFavoriteStatus)
         }
     }
 
     private fun updateFavoriteIcon(button: ImageButton, isFavorite: Boolean) {
-        if(isFavorite) {
+        if (isFavorite) {
             button.setImageResource(R.drawable.star_filled)
-        }
-        else {
+        } else {
             button.setImageResource(R.drawable.star_outline)
         }
     }

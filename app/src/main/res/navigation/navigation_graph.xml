@@ -13,8 +13,10 @@
         <action
             android:id="@+id/action_foodCategoryFragment_to_foodListFragment"
             app:destination="@id/foodListFragment">
-
         </action>
+        <action
+            android:id="@+id/action_foodCategoryFragment_to_favoriteFoodFragment"
+            app:destination="@id/favoriteFoodFragment" />
     </fragment>
 
     <fragment
@@ -27,10 +29,18 @@
             app:destination="@id/foodCategoryFragment" />
         <argument
             android:name="selectedCategory"
-            app:argType="string"/>
-<!--            app:nullable="false"/>-->
+            app:argType="string" />
         <argument
             android:name="selectedAmount"
             app:argType="integer" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/favoriteFoodFragment"
+        android:name="com.example.foodish.FavoriteFoodFragment"
+        android:label="FavoriteFoodFragment" >
+        <action
+            android:id="@+id/action_favoriteFoodFragment_to_foodCategoryFragment"
+            app:destination="@id/foodCategoryFragment" />
     </fragment>
 </navigation>
