@@ -47,6 +47,8 @@ class FavoriteFoodFragment : Fragment() {
                     setupRecyclerView(favoriteFoods)
                 } else {
                     Toast.makeText(context, "No favorite foods found", Toast.LENGTH_SHORT).show()
+                    setupRecyclerView(emptyList())
+                    findNavController().navigate(R.id.action_favoriteFoodFragment_to_foodCategoryFragment)
                 }
             }
         }
