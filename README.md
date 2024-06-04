@@ -4,7 +4,7 @@ Foodish is an Android app that lets users explore various food categories, fetch
 
 ## Demo
 
-![ezgif-3-0d93db888d](https://github.com/Seggenz/Foodish/assets/22409708/b4ebc62b-6802-4535-87ef-b5c177c53814)
+![gif](https://github.com/Seggenz/Foodish/assets/22409708/a9d7b234-282d-438b-a0d8-ecf41747a134)
 
 
 ## Installation
